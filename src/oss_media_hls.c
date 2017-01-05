@@ -311,15 +311,17 @@ static int oss_media_hls_ends_with(const char *str, const char *surfix) {
     return strncmp(str + strlen(str) - strlen(surfix), surfix, strlen(surfix)) == 0;
 }
 
-oss_media_hls_file_t* oss_media_hls_open(char *bucket_name,
-                                       char *object_key,
-                                       auth_fn_t auth_func)
+oss_media_hls_file_t* oss_media_hls_open(void *cb_ctx,
+                                         char *bucket_name,
+                                         char *object_key,
+                                         auth_fn_t auth_func)
 {
     oss_media_hls_file_t* file;
     
     file = (oss_media_hls_file_t*)malloc(sizeof(oss_media_hls_file_t));
-    
-    file->file = oss_media_file_open(bucket_name, object_key, "a", auth_func);
+
+    file->cb_ctx = cb_ctx;
+    file->file = oss_media_file_open(file->cb_ctx, bucket_name, object_key, "a", auth_func);
     if (file->file == NULL) {
         aos_error_log("open oss media file failed.");
         free(file);

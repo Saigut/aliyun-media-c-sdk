@@ -39,13 +39,13 @@ static void oss_auth(oss_media_file_t *file,
 
     // get authorize info from media server when force
     if (force) {
-        file->auth_func(file);
+        file->auth_func(file->cb_ctx, file);
     }
     // get authorize info from media server when expired
     else {
         time_t now = time(NULL);
         if (!file->expiration || now >= file->expiration) {
-            file->auth_func(file);
+            file->auth_func(file->cb_ctx, file);
         }
     }
 }
@@ -64,7 +64,8 @@ void oss_media_destroy() {
     aos_http_io_deinitialize();
 }
 
-oss_media_file_t* oss_media_file_open(char *bucket_name,
+oss_media_file_t* oss_media_file_open(void *cb_ctx,
+                                      char *bucket_name,
                                       char *object_key,
                                       char *mode,
                                       auth_fn_t auth_func) 
@@ -82,7 +83,8 @@ oss_media_file_t* oss_media_file_open(char *bucket_name,
         aos_error_log("mode[%s] is wrong\n", mode);
         return NULL;
     }
-    
+
+    file->cb_ctx = cb_ctx;
     file->auth_func = auth_func;
     oss_auth(file, 1);
     

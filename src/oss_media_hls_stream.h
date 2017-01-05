@@ -11,6 +11,7 @@ typedef struct oss_media_hls_stream_options_s {
     char *bucket_name;
     char *ts_name_prefix;
     char *m3u8_name;
+    void *cb_ctx;
     int32_t video_frame_rate;
     int32_t audio_sample_rate;
     int32_t hls_time;

@@ -23,7 +23,7 @@ typedef struct {
  *  this typedef define the auth_fn_t.
  */
 struct oss_media_file_s;
-typedef void (*auth_fn_t)(struct oss_media_file_s *file);
+typedef void (*auth_fn_t)(void *cb_ctx, struct oss_media_file_s *file);
 
 /**
  *  this struct describes the properties of oss media file
@@ -38,6 +38,7 @@ typedef struct oss_media_file_s {
     char   *access_key_secret;
     char   *token;
     char   *mode;
+    void   *cb_ctx;
     oss_media_file_stat_t _stat;
 
     time_t expiration;
@@ -70,7 +71,8 @@ void oss_media_destroy();
  *      upon successful completion 0 is returned.
  *      otherwise, -1 is returned and code/messaage in struct of file is set to indicate the error. 
  */
-oss_media_file_t* oss_media_file_open(char *bucket_name,
+oss_media_file_t* oss_media_file_open(void *cb_ctx,
+                                      char *bucket_name,
                                       char *object_key,
                                       char *mode,
                                       auth_fn_t auth_func);

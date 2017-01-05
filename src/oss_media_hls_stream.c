@@ -42,7 +42,7 @@ oss_media_hls_stream_t* oss_media_hls_stream_open(auth_fn_t auth_func,
     aos_pool_create(&stream->pool, NULL);
 
     char *ts_file_name = oss_media_create_new_ts_file_name(options, stream);
-    stream->ts_file = oss_media_hls_open(options->bucket_name, 
+    stream->ts_file = oss_media_hls_open(options->cb_ctx, options->bucket_name,
             ts_file_name, auth_func);
     if (stream->ts_file == NULL) {
         aos_error_log("open ts file[%s] failed.", ts_file_name);
@@ -50,7 +50,7 @@ oss_media_hls_stream_t* oss_media_hls_stream_open(auth_fn_t auth_func,
         return NULL;
     }
 
-    stream->m3u8_file = oss_media_hls_open(options->bucket_name, 
+    stream->m3u8_file = oss_media_hls_open(options->cb_ctx, options->bucket_name,
             options->m3u8_name, auth_func);
     if (stream->m3u8_file == NULL) {
         aos_error_log("open m3u8 file[%s] failed.", options->m3u8_name);
@@ -182,6 +182,8 @@ static int close_and_open_new_file(oss_media_hls_stream_t *stream) {
     // temp store auth_func point
     auth_fn_t auth_func = stream->ts_file->file->auth_func;
 
+    void *cb_ctx = stream->ts_file->file->cb_ctx;
+
     // close current hls file
     ret = oss_media_hls_close(stream->ts_file);
     if (ret != 0) {
@@ -192,7 +194,7 @@ static int close_and_open_new_file(oss_media_hls_stream_t *stream) {
 
     // open next ts file
     char *ts_file_name = oss_media_create_new_ts_file_name(stream->options, stream);
-    stream->ts_file = oss_media_hls_open(stream->options->bucket_name, 
+    stream->ts_file = oss_media_hls_open(cb_ctx, stream->options->bucket_name,
             ts_file_name, auth_func);
     if (stream->ts_file == NULL) {
         aos_error_log("open ts file[%s] failed.", ts_file_name);

@@ -93,6 +93,7 @@ typedef struct oss_media_hls_file_s {
     oss_media_file_t *file;
     oss_media_hls_buf_t *buffer;
     oss_media_hls_options_t options;
+    void *cb_ctx;
     int64_t frame_count;
 } oss_media_hls_file_t;
 
@@ -103,7 +104,8 @@ typedef struct oss_media_hls_file_s {
  *      On success, a pointer to the oss_media_hls_file_t
  *      otherwise, a null pointer is returned
  */
-oss_media_hls_file_t* oss_media_hls_open(char *bucket_name,
+oss_media_hls_file_t* oss_media_hls_open(void *cb_ctx,
+                                         char *bucket_name,
                                          char *object_key,
                                          auth_fn_t auth_func);
 
