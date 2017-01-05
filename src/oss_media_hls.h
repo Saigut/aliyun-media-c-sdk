@@ -60,6 +60,7 @@ typedef int (*file_handler_fn_t) (struct oss_media_hls_file_s *file);
  */
 typedef struct oss_media_hls_m3u8_info_s {
     float duration;
+    int64_t ts_length;
     char url[OSS_MEDIA_M3U8_URL_LENGTH];
 } oss_media_hls_m3u8_info_t;
 

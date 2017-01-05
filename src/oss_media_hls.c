@@ -512,7 +512,10 @@ int oss_media_hls_write_m3u8(int size,
     int len;
     for (i = 0;i < size; i++) {
         char item[256 + 32];
-        len = sprintf(item, "#EXTINF:%.3f,\n%s\n", m3u8[i].duration, m3u8[i].url);
+        len = snprintf(item, sizeof(item), "#EXTINF:%.3f,\n#EXT-X-BYTERANGE:%lld\n%s\n",
+                      m3u8[i].duration,
+                      m3u8[i].ts_length,
+                      m3u8[i].url);
         memcpy(&file->buffer->buf[file->buffer->pos], item, len);
         file->buffer->pos += len;
     }

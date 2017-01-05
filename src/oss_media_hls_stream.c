@@ -18,7 +18,7 @@ static char *oss_media_create_new_ts_file_name(
         
     int16_t pos_digit_num = oss_media_get_digit_num(stream->ts_file_index);
     char pos_str[pos_digit_num + 1];
-    sprintf(pos_str, "%d", stream->ts_file_index++);
+    sprintf(pos_str, "%lld", stream->ts_file_index++);
     
     return apr_psprintf(stream->pool, "%.*s%.*s%.*s",
                         (int)strlen(options->ts_name_prefix), 
@@ -135,6 +135,7 @@ static void oss_media_set_m3u8_info(int32_t pos,
     aos_pool_destroy(sub_pool);
     
     stream->m3u8_infos[pos].duration = duration;
+    stream->m3u8_infos[pos].ts_length = stream->ts_file->file->_stat.length;
 }
 
 static int oss_media_write_m3u8(float duration,
