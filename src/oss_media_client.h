@@ -23,7 +23,7 @@ typedef struct {
  *  this typedef define the auth_fn_t.
  */
 struct oss_media_file_s;
-typedef void (*auth_fn_t)(void *cb_ctx, struct oss_media_file_s *file);
+typedef void (*auth_fn_t)(struct oss_media_file_s *file);
 
 /**
  *  this struct describes the properties of oss media file

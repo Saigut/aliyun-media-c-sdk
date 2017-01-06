@@ -39,13 +39,13 @@ static void oss_auth(oss_media_file_t *file,
 
     // get authorize info from media server when force
     if (force) {
-        file->auth_func(file->cb_ctx, file);
+        file->auth_func(file);
     }
     // get authorize info from media server when expired
     else {
         time_t now = time(NULL);
         if (!file->expiration || now >= file->expiration) {
-            file->auth_func(file->cb_ctx, file);
+            file->auth_func(file);
         }
     }
 }
